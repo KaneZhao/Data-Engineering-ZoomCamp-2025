@@ -1,18 +1,6 @@
 ## Module 2 Homework
 
-ATTENTION: At the end of the submission form, you will be required to include a link to your GitHub repository or other public code-hosting site. This repository should contain your code for solving the homework. If your solution includes code that is not in file format, please include these directly in the README file of your repository.
-
-> In case you don't get one option exactly, select the closest one
-
-For the homework, we'll be working with the _green_ taxi dataset located here:
-
-`https://github.com/DataTalksClub/nyc-tlc-data/releases/tag/green/download`
-
-To get a `wget`-able link, use this prefix (note that the link itself gives 404):
-
-`https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/`
-
-### Quiz Questions
+### Quiz Questions & Answers
 
 Complete the Quiz shown below. It’s a set of 6 multiple-choice questions to test your understanding of workflow orchestration, Kestra and ETL pipelines for data lakes and warehouses.
 
@@ -42,12 +30,35 @@ The answer is 128.3 MB.
 - 18,324,219
 - 29,430,127
 
+```bash
+select count(1) from
+`careful-sun-447923-f3.zoomcamp.yellow_tripdata`
+where filename like 'yellow_tripdata_2020%'
+limit 1
+;
+```
+
+result:
+![Q3](./pic/Q3.png)
+
 4. How many rows are there for the `Green` Taxi data for all CSV files in the year 2020?
 
 - 5,327,301
 - 936,199
 - 1,734,051
 - 1,342,034
+
+```bash
+select count(1) from
+`careful-sun-447923-f3.zoomcamp.green_tripdata`
+where filename like 'green_tripdata_2020%'
+limit 1
+;
+```
+
+result:
+
+![Q4](./pic/Q4.png)
 
 5. How many rows are there for the `Yellow` Taxi data for the March 2021 CSV file?
 
@@ -56,6 +67,10 @@ The answer is 128.3 MB.
 - 1,925,152
 - 2,561,031
 
+I added '2021' to the yaml and executated the work.
+result:
+![Q5](./pic/Q5.png)
+
 6. How would you configure the timezone to New York in a Schedule trigger?
 
 - Add a `timezone` property set to `EST` in the `Schedule` trigger configuration
@@ -63,11 +78,4 @@ The answer is 128.3 MB.
 - Add a `timezone` property set to `UTC-5` in the `Schedule` trigger configuration
 - Add a `location` property set to `New_York` in the `Schedule` trigger configuration
 
-## Submitting the solutions
-
-- Form for submitting: https://courses.datatalks.club/de-zoomcamp-2025/homework/hw2
-- Check the link above to see the due date
-
-## Solution
-
-Will be added after the due date
+I chose 'Add a timezone property set to America/New_York in the Schedule trigger configuration'.
