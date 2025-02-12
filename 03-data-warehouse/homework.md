@@ -7,6 +7,10 @@ options (
   format = 'PARQUET',
   uris = ['gs://bucket-kane-zoomcamp-2025/yellow_tripdata_2024-*.parquet']
 )
+
+create or replace table careful-sun-447923-f3.zoomcamp.yellow_tripdata_2024_non_partitioned as
+select * from careful-sun-447923-f3.zoomcamp.external_yellow_tripdata_2024
+;
 ```
 
 ## Question 1:
@@ -18,6 +22,14 @@ Question 1: What is count of records for the 2024 Yellow Taxi Data?
 - 20,332,093
 - 85,431,289
 
+```bash
+select count(1) as cnt
+from careful-sun-447923-f3.zoomcamp.external_yellow_tripdata_2024
+;
+```
+
+result: 20332093
+
 ## Question 2:
 
 Write a query to count the distinct number of PULocationIDs for the entire dataset on both the tables.</br>
@@ -27,6 +39,11 @@ What is the **estimated amount** of data that will be read when this query is ex
 - 0 MB for the External Table and 155.12 MB for the Materialized Table
 - 2.14 GB for the External Table and 0MB for the Materialized Table
 - 0 MB for the External Table and 0MB for the Materialized Table
+
+External Table:
+![Q2_1](./img/Q2_1.png)
+Table:
+![Q2_2](./img/Q2_2.png)
 
 ## Question 3:
 
@@ -39,6 +56,12 @@ Write a query to retrieve the PULocationID from the table (not the external tabl
 - BigQuery automatically caches the first queried column, so adding a second column increases processing time but does not affect the estimated bytes scanned.
 - When selecting multiple columns, BigQuery performs an implicit join operation between them, increasing the estimated bytes processed
 
+PULocationID:
+![Q3_1](./img/Q3_1.png)
+
+PULocationID, DOLocationID:
+![Q3_2](./img/Q3_2.png)
+
 ## Question 4:
 
 How many records have a fare_amount of 0?
@@ -47,6 +70,15 @@ How many records have a fare_amount of 0?
 - 546,578
 - 20,188,016
 - 8,333
+
+```bash
+select count(1)
+from `careful-sun-447923-f3.zoomcamp.yellow_tripdata_2024_non_partitioned`
+where fare_amount = 0
+;
+```
+
+result: 8333
 
 ## Question 5:
 
@@ -71,6 +103,22 @@ Choose the answer which most closely matches.</br>
 - 5.87 MB for non-partitioned table and 0 MB for the partitioned table
 - 310.31 MB for non-partitioned table and 285.64 MB for the partitioned table
 
+```bash
+drop table if exists careful-sun-447923-f3.zoomcamp.yellow_tripdata_2024_non_partitioned;
+create table careful-sun-447923-f3.zoomcamp.yellow_tripdata_2024_non_partitioned
+partition by DATE(tpep_dropoff_datetime) as
+select * from careful-sun-447923-f3.zoomcamp.external_yellow_tripdata_2024;
+
+select distinct(VendorID)
+from careful-sun-447923-f3.zoomcamp.yellow_tripdata_2024_non_partitioned
+where date(tpep_dropoff_timedate) > '2024-03-01'
+and data(tpep_dropoff_timedate) <= '2024-03-15'
+;
+
+```
+
+![Q6](./img/Q6.png)
+
 ## Question 7:
 
 Where is the data stored in the External Table you created?
@@ -80,17 +128,11 @@ Where is the data stored in the External Table you created?
 - GCP Bucket
 - Big Table
 
+![Q7](./img/Q7.png)
+
 ## Question 8:
 
 It is best practice in Big Query to always cluster your data:
 
 - True
 - False
-
-## (Bonus: Not worth points) Question 9:
-
-No Points: Write a `SELECT count(*)` query FROM the materialized table you created. How many bytes does it estimate will be read? Why?
-
-## Submitting the solutions
-
-Form for submitting: https://courses.datatalks.club/de-zoomcamp-2025/homework/hw3
